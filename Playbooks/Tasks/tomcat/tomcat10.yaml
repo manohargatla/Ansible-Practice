@@ -1,6 +1,6 @@
-## Write a playbook to install openmrs application 
+## Write a playbook to install tomcat10 application 
 --- 
-- name: install openmrs application
+- name: install tomcat10 application
   hosts: tomcat
   become: yes
   tasks:
@@ -28,7 +28,7 @@
         shell: "{{ into_shell }}"
     - name: Download tomcat tar file # install tomcat
       ansible.builtin.get_url:
-        url: https://archive.apache.org/dist/tomcat/tomcat-{{ tomcat_main_ver }}/v{{ tomcat_ver }}/bin/apache-tomcat-{{ tomcat_ver }}.tar.gz
+        url: https://www-eu.apache.org/dist/tomcat/tomcat-{{ tomcat_main_ver }}/v{{ tomcat_ver }}/bin/apache-tomcat-{{ tomcat_ver }}.tar.gz
         dest: "/tmp/apache-tomcat-{{ tomcat_ver }}.tar.gz"
     - name: flush_handlers
       meta: flush_handlers
@@ -41,8 +41,13 @@
         src: "/tmp/apache-tomcat-{{ tomcat_ver }}.tar.gz"
         dest: "{{ home_dir }}"
         remote_src: yes
-        extra_opts:
-          --strip-components=1
+    - name: create a symbolic link
+      ansible.builtin.file:
+        src: "{{ home_dir }}/apache-tomcat-{{ tomcat_ver }}"
+        dest: "{{ home_dir }}/latest"
+        state: link
+      notify:
+        - daemon-reload
     - name: Changing group to tomcat
       ansible.builtin.file:
         path: "{{ home_dir }}"
@@ -50,23 +55,13 @@
         owner: "{{ user }}"
         recurse: yes
         state: directory
-    - name: Change conf permissions
+    - name: Change shell_script files permissions
       ansible.builtin.file:
-        path: conf
+        path: "{{ home_dir }}/latest/bin/*.sh"
         group: "{{ group }}"
         owner: "{{ user }}"
         recurse: yes
-        mode: g+rx
-    - name: Changing ownership for directories webapps permissions
-      ansible.builtin.file:
-        path:
-          - webapps/
-          - work/
-          - temp/
-          - logs
-        group: "{{ group }}"
-        owner: "{{ user }}"
-        recurse: yes  
+        mode: '0655'
       notify:
         - daemon-reload
     - name: copy the tomcat service file
@@ -80,38 +75,5 @@
     - name: start tomcat service
       ansible.builtin.systemd:
         name: tomcat
+        enabled: yes
         state: started
-    - name: create a directory if doesn't exists  # install openmrs app
-      ansible.builtin.file:
-        path: /var/lib/OpenMRS
-        group: "{{ group }}"
-        owner: "{{ user }}"
-        recurse: yes
-        state: directory
-    - name: Download openmrs tar file
-      ansible.builtin.get_url:
-        url: https://sourceforge.net/projects/openmrs/files/releases/OpenMRS_Platform_2.5.0/openmrs.war
-        dest: /tmp/openmrs.war
-    - name: flush_handlers
-      meta: flush_handlers
-    - name: copy the war file
-      ansible.builtin.copy:
-        src: /tmp/openmrs.war
-        dest: "{{ home_dir }}/webapps"
-        remote_src: yes
-        group: "{{ group }}"
-        owner: "{{ user }}"
-      notify:
-        - daemon-reload
-    - name: Change file, use and group permissions
-      ansible.builtin.file:
-        path: "{{ home_dir }}/webapps"
-        group: "{{ group }}"
-        owner: "{{ user }}"
-        recurse: yes
-        state: directory
-
-      
-
-      
-        

@@ -1,0 +1,7 @@
+# handlers file for nopcommerce
+---
+- name: Start service nopCommerce
+  ansible.builtin.service:
+    name: nopCommerce
+    enabled: true
+    state: started

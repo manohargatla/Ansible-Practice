@@ -16,6 +16,17 @@
         state: present
     - name: Create a directory if it does not exist
       ansible.builtin.file:
-        path: /site
+        path: /DemoSite
         state: directory
+    - name: build the mvn package
+      ansible.builtin.shell:
+        cmd: mvn clean install
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: /DemoSite/site
+        state: directory
+    - name: run the application
+      ansible.builtin.shell:
+        cmd: mvn spring-boot:run
+
       

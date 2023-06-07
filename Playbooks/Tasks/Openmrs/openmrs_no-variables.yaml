@@ -9,6 +9,8 @@
         name: openjdk-8-jdk
         update_cache: yes
         state: present
+      notify:
+        - daemon-reload
     - name: Create a group 
       ansible.builtin.group:
         name: tomcat
@@ -35,6 +37,8 @@
         remote_src: yes
         extra_opts:
           --strip-components=1
+    - name: Flush handlers
+      meta: flush_handlers
     - name: Changing group to tomcat
       ansible.builtin.file:
         path: /opt/tomcat
@@ -63,13 +67,18 @@
       ansible.builtin.template:
         src: tomcat.service
         dest: /etc/systemd/system/tomcat.service
+  handlers:
     - name: daemon-reload
       ansible.builtin.systemd:
         daemon_reload: yes
-    - name: start tomcat service
+      notify:
+        - restart tomcat service
+    - name: restart tomcat service
       ansible.builtin.systemd:
         name: tomcat
         state: started
+      notify:
+        - daemon-reload
     - name: create a directory if doesn't exists  # install openmrs app
       ansible.builtin.file:
         path: /var/lib/OpenMRS
@@ -77,10 +86,14 @@
         owner: tomcat
         recurse: yes
         state: directory
+      notify:
+        - daemon-reload
     - name: Download openmrs tar file
       ansible.builtin.get_url:
         url: https://sourceforge.net/projects/openmrs/files/releases/OpenMRS_Platform_2.5.0/openmrs.war
         dest: /tmp/openmrs.war
+    - name: Flush handlers
+      meta: flush_handlers
     - name: copy the war file
       ansible.builtin.copy:
         src: /tmp/openmrs.war
@@ -88,6 +101,8 @@
         remote_src: yes
         group: tomcat
         owner: tomcat
+      notify:
+        - daemon-reload
     - name: Change ownership permissions for openmrs
       ansible.builtin.file:
         path: /opt/tomcat/webapps
