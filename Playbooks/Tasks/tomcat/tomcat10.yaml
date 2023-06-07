@@ -55,13 +55,9 @@
         owner: "{{ user }}"
         recurse: yes
         state: directory
-    - name: Change shell_script files permissions
-      ansible.builtin.file:
-        path: "{{ home_dir }}/latest/bin/*.sh"
-        group: "{{ group }}"
-        owner: "{{ user }}"
-        recurse: yes
-        mode: '0655'
+    - name: Add execute permissions for shell scripts
+      ansible.builtin.shell:
+        cmd: "chmod +x {{ homedir }}/latest/bin/*.sh"   
       notify:
         - daemon-reload
     - name: copy the tomcat service file
