@@ -19,7 +19,7 @@
         create_home: yes
         group: "{{ group }}"
         home: "{{ home_dir }}"
-        into_shell: "{{ shell }}"
+        shell: "{{ into_shell }}"
     - name: Download tomcat tar file # install tomcat
       ansible.builtin.get_url:
         url: https://archive.apache.org/dist/tomcat/tomcat-{{ tomcat_main_ver }}/v{{ tomcat_ver }}/bin/apache-tomcat-{{ tomcat_ver }}.tar.gz
