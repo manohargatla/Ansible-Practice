@@ -1,6 +1,6 @@
 ## Write a playbook to install tomcat10 application 
 --- 
-- name: install tomcat10 application
+- name: install tomcat10 server
   hosts: tomcat
   become: yes
   tasks:
@@ -8,7 +8,7 @@
       ansible.builtin.fail:
         msg: "this playbook is designed to run only on ubuntu"
       when: ansible_facts['distribution'] != "Ubuntu"
-    - name: install java-17  ## install java 
+    - name: install java-11  ## install java 
       ansible.builtin.apt:
         name: "{{ java_version }}"
         update_cache: yes
@@ -25,22 +25,24 @@
         create_home: yes
         group: "{{ group }}"
         home: "{{ home_dir }}"
-        shell: "{{ into_shell }}"
+        shell: "{{ shell }}"
     - name: Download tomcat tar file # install tomcat
       ansible.builtin.get_url:
-        url: https://www-eu.apache.org/dist/tomcat/tomcat-{{ tomcat_main_ver }}/v{{ tomcat_ver }}/bin/apache-tomcat-{{ tomcat_ver }}.tar.gz
+        url: "https://www-eu.apache.org/dist/tomcat/tomcat-{{ tomcat_main_ver }}/v{{ tomcat_ver }}/bin/apache-tomcat-{{ tomcat_ver }}.tar.gz"
         dest: "/tmp/apache-tomcat-{{ tomcat_ver }}.tar.gz"
     - name: flush_handlers
       meta: flush_handlers
+    - name: find if the tomcat is already extracted
+      ansible.builtin.stat:
+        path: "{{ home_dir }}/apache-tomcat-{{ tomcat_ver }}/LICENSE"
+      register: license_info
     - name: Create a directory if it does not exist
-      ansible.builtin.file:
-        path: "{{ home_dir }}"
-        state: directory
     - name: untar the the tomcat tar file
       ansible.builtin.unarchive:
         src: "/tmp/apache-tomcat-{{ tomcat_ver }}.tar.gz"
         dest: "{{ home_dir }}"
         remote_src: yes
+      when: not  license_info.stat.exists
     - name: create a symbolic link
       ansible.builtin.file:
         src: "{{ home_dir }}/apache-tomcat-{{ tomcat_ver }}"
@@ -72,4 +74,4 @@
       ansible.builtin.systemd:
         name: tomcat
         enabled: yes
-        state: started
+        state: restarted
