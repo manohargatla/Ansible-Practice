@@ -1,7 +1,7 @@
 ## Write a playbook to install openmrs application 
 --- 
 - name: install openmrs application
-  hosts: all
+  hosts: tomcat
   become: yes
   tasks:
     - name: install java-17  ## install java 
