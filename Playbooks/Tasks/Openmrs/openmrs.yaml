@@ -23,14 +23,14 @@
     - name: Download tomcat tar file # install tomcat
       ansible.builtin.get_url:
         url: https://archive.apache.org/dist/tomcat/tomcat-{{ tomcat_main_ver }}/v{{ tomcat_ver }}/bin/apache-tomcat-{{ tomcat_ver }}.tar.gz
-        dest: /tmp/apache-tomcat-{{ tomcat_ver }}.tar.gz
+        dest: "/tmp/apache-tomcat-{{ tomcat_ver }}.tar.gz"
     - name: Create a directory if it does not exist
       ansible.builtin.file:
       path: "{{ home_dir }}"
       state: directory
     - name: untar the the tomcat tar file
       ansible.builtin.unarchive:
-        src: /tmp/apache-tomcat-{{ tomcat_ver }}.tar.gz
+        src: "/tmp/apache-tomcat-{{ tomcat_ver }}.tar.gz"
         dest: "{{ home_dir }}"
         remote_src: yes
         extra_opts:
