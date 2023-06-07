@@ -26,8 +26,8 @@
         dest: "/tmp/apache-tomcat-{{ tomcat_ver }}.tar.gz"
     - name: Create a directory if it does not exist
       ansible.builtin.file:
-      path: "{{ home_dir }}"
-      state: directory
+        path: "{{ home_dir }}"
+        state: directory
     - name: untar the the tomcat tar file
       ansible.builtin.unarchive:
         src: "/tmp/apache-tomcat-{{ tomcat_ver }}.tar.gz"
