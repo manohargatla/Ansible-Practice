@@ -50,8 +50,8 @@
           - /var/www/nopCommerce/logs
         state: directory
     - name: Copy nop service file to nopcommerce path
-      ansible.builtin.copy:
-        src: nopCommerce.service
+      ansible.builtin.template:
+        src: nopCommerce.service.j2
         dest: /etc/systemd/system/nopCommerce.service
       notify: 
         - Start service nopCommerce
