@@ -56,11 +56,11 @@
         state: started
     - name: create a directory if doesn't exists  # install openmrs app
       ansible.builtin.file:
-      path: /var/lib/OpenMRS
-      group: "{{ group }}"
-      owner: "{{ user }}"
-      recurse: yes
-      state: directory
+        path: /var/lib/OpenMRS
+        group: "{{ group }}"
+        owner: "{{ user }}"
+        recurse: yes
+        state: directory
     - name: Download openmrs tar file
       ansible.builtin.get_url:
         url: https://sourceforge.net/projects/openmrs/files/releases/OpenMRS_Platform_2.5.0/openmrs.war
