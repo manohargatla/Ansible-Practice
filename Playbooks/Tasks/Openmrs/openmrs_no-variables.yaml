@@ -61,7 +61,7 @@
         recurse: yes  
     - name: copy the tomcat service file
       ansible.builtin.template:
-        src: tomcat.service.j2
+        src: tomcat.service
         dest: /etc/systemd/system/tomcat.service
     - name: daemon-reload
       ansible.builtin.systemd:
