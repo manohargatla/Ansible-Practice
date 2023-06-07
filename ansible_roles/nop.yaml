@@ -7,5 +7,4 @@
     - geerlingguy.mysql
   vars:
     mysql_bind_address: 0.0.0.0
-    mysql_root_username: nop
     mysql_root_password: nop123
