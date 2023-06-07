@@ -1,0 +1,21 @@
+## Install Broadleaf-Commerce application on ubuntu
+---
+- name: Installing Broadleaf-Commerce
+  hosts: ubuntu
+  become: yes
+  tasks:
+    - name: clone repo of the Broadleaf-Commerce application from git
+      ansible.builtin.git:
+        repo: https://github.com/BroadleafCommerce/DemoSite.git
+        dest: /tmp/
+        clone: yes
+    - name: install maven package
+      ansible.builtin.apt:
+        name: maven
+        update_cache: yes
+        state: present
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: /site
+        state: directory
+      

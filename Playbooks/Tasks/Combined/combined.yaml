@@ -1,0 +1,63 @@
+## Installing apache on ubuntu && httpd on Redhat by using conditions
+---
+- name: install lamp server on ubuntu
+  hosts: ubuntu
+  become: yes
+  vars:
+    info_page_path: /var/www/html/info.php
+  tasks:
+    - name: install apache2 on ubuntu
+      ansible.builtin.apt:
+        name: "{{ package_name }}"
+        update_cache: yes
+        state: present
+      when: ansible_facts['os_family'] == 'Debian'
+    - name: install php on ubuntu
+      ansible.builtin.apt:
+        name: 
+          - php
+          - libapache2-mod-php
+          - php-mysql
+        update_cache: yes
+        state: present
+      notify:
+        - Restart apache
+      when: ansible_facts['os_family'] == 'Debian'
+    - name: Copy info.php to php path
+      ansible.builtin.copy:
+        src: info.php
+        dest: "{{ info_page_path }}"
+      notify:
+        - Restart apache
+      when: ansible_facts['os_family'] == 'Debian'
+    - name: install httpd on Redhat
+      ansible.builtin.yum:
+        name: "{{ package_name }}"
+        update_cache: yes
+        state: present
+      notify:
+        - Restart httpd
+      when: ansible_facts['os_family'] == 'RedHat'
+    - name: install php on Redhat
+      ansible.builtin.yum:
+        name: php
+        state: present
+      notify:
+        - Restart httpd
+      when: ansible_facts['os_family'] == 'RedHat'
+    - name: Copy info.php to php path
+      ansible.builtin.copy:
+        src: info.php
+        dest: "{{ info_page_path }}"
+      notify:
+        - Restart httpd
+      when: ansible_facts['os_family'] == 'RedHat'
+  handlers:
+     - name: Restart apache
+       ansible.builtin.service:  
+        name: "{{ package_name }}"
+        state: started
+     - name: Restart httpd
+       ansible.builtin.service:  
+        name: "{{ package_name }}"
+        state: started

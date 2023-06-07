@@ -1,0 +1,7 @@
+[ubuntu]
+        package_name=apache2 
+            
+[redhat]
+        package_name=httpd 
+
+[webserver]

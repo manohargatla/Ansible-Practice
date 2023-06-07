@@ -35,13 +35,30 @@
         remote_src: yes
         extra_opts:
           --strip-components=1
-    - name: Change file, use and group permissions
+    - name: Changing group to tomcat
       ansible.builtin.file:
         path: "{{ home_dir }}"
         group: "{{ group }}"
         owner: "{{ user }}"
         recurse: yes
         state: directory
+    - name: Change conf permissions
+      ansible.builtin.file:
+        path: conf
+        group: "{{ group }}"
+        owner: "{{ user }}"
+        recurse: yes
+        mode: g+rx
+    - name: Changing ownership for directories webapps permissions
+      ansible.builtin.file:
+        path:
+          - webapps/
+          - work/
+          - temp/
+          - logs
+        group: "{{ group }}"
+        owner: "{{ user }}"
+        recurse: yes  
     - name: copy the tomcat service file
       ansible.builtin.template:
         src: tomcat.service.j2
@@ -73,7 +90,7 @@
         owner: "{{ user }}"
     - name: Change file, use and group permissions
       ansible.builtin.file:
-        path: "{{ home_dir }}/webapps/openmrs.war"
+        path: "{{ home_dir }}/webapps"
         group: "{{ group }}"
         owner: "{{ user }}"
         recurse: yes
