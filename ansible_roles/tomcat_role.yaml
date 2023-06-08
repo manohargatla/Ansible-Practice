@@ -1,5 +1,5 @@
 ---
-- name: install nopcommerce using role
+- name: install tomcat10 using role
   hosts: tomcat
   become: yes
   roles:
