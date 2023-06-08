@@ -5,3 +5,6 @@ home_dir: /opt/tomcat
 shell: /bin/false
 tomcat_main_ver: 10
 tomcat_ver: 10.1.9
+tomcat_user_name: manu
+tomcat_user_pwd: manu@1223
+tomcat_context_valve_allow: ".*"

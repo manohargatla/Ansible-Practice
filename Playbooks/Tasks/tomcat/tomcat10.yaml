@@ -40,11 +40,15 @@
         dest: "{{ home_dir }}"
         remote_src: yes
       when: not  license_info.stat.exists
+      notify:
+        - Add execute permissions for shell scripts
     - name: create a symbolic link
       ansible.builtin.file:
         src: "{{ home_dir }}/apache-tomcat-{{ tomcat_ver }}"
         dest: "{{ home_dir }}/latest"
         state: link
+      notify:
+        - Add execute permissions for shell scripts
     - name: Changing group to tomcat
       ansible.builtin.file:
         path: "{{ home_dir }}"
@@ -52,13 +56,40 @@
         owner: "{{ user }}"
         recurse: yes
         state: directory
-    - name: Add execute permissions for shell scripts
-      ansible.builtin.shell:
-        cmd: "chmod +x {{ home_dir }}/latest/bin/*.sh"   
     - name: copy the tomcat service file
       ansible.builtin.template:
         src: tomcat.service.j2
         dest: /etc/systemd/system/tomcat.service
+      notify:
+        - start tomcat service 
+    - name: Configuring Tomcat users
+      ansible.builtin.template:
+        src: tomcat-users.xml.j2
+        dest: "{{ home_dir }}/latest/conf/tomcat-users.xml"
+        owner: "{{ user }}"
+        group: "{{ group }}"
+      notify:
+        - start tomcat service
+    - name: access to all for manager app
+      ansible.builtin.template:
+        src: context.xml.j2
+        dest: "{{ home_dir }}/latest/webapps/manager/META-INF/context.xml"
+        owner: "{{ user }}"
+        group: "{{ group }}"
+      notify:
+        - start tomcat service
+    - name: access to all for host manager app
+      ansible.builtin.template:
+        src: context.xml.j2
+        dest: "{{ home_dir }}/latest/webapps/host-manager/META-INF/context.xml"
+        owner: "{{ user }}"
+        group: "{{ group }}"
+      notify:
+        - start tomcat service
+  handlers:
+    - name: Add execute permissions for shell scripts
+      ansible.builtin.shell:
+        cmd: "chmod +x {{ home_dir }}/latest/bin/*.sh"   
     - name: daemon-reload
       ansible.builtin.systemd:
         daemon_reload: yes
