@@ -1,2 +1,13 @@
+# handlers file for tomcat10
 ---
-# handlers file for nopcommerce
+- name: Add execute permissions for shell scripts
+  ansible.builtin.shell:
+    cmd: "chmod +x {{ home_dir }}/latest/bin/*.sh"   
+- name: daemon-reload
+  ansible.builtin.systemd:
+    daemon_reload: yes
+- name: start tomcat service
+  ansible.builtin.systemd:
+    name: tomcat
+    enabled: yes
+    state: restarted
