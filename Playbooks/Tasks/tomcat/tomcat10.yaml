@@ -13,8 +13,6 @@
         name: "{{ java_version }}"
         update_cache: yes
         state: present
-      notify:
-        - daemon-reload
     - name: Create a group 
       ansible.builtin.group:
         name: "{{ group }}"
@@ -47,8 +45,6 @@
         src: "{{ home_dir }}/apache-tomcat-{{ tomcat_ver }}"
         dest: "{{ home_dir }}/latest"
         state: link
-      notify:
-        - daemon-reload
     - name: Changing group to tomcat
       ansible.builtin.file:
         path: "{{ home_dir }}"
@@ -59,13 +55,10 @@
     - name: Add execute permissions for shell scripts
       ansible.builtin.shell:
         cmd: "chmod +x {{ home_dir }}/latest/bin/*.sh"   
-      notify:
-        - daemon-reload
     - name: copy the tomcat service file
       ansible.builtin.template:
         src: tomcat.service.j2
         dest: /etc/systemd/system/tomcat.service
-  handlers:
     - name: daemon-reload
       ansible.builtin.systemd:
         daemon_reload: yes
