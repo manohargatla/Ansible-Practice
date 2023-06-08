@@ -36,7 +36,6 @@
       ansible.builtin.stat:
         path: "{{ home_dir }}/apache-tomcat-{{ tomcat_ver }}/LICENSE"
       register: license_info
-    - name: Create a directory if it does not exist
     - name: untar the the tomcat tar file
       ansible.builtin.unarchive:
         src: "/tmp/apache-tomcat-{{ tomcat_ver }}.tar.gz"
