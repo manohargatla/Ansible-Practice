@@ -6,5 +6,4 @@
     - nopcommerce
     - geerlingguy.mysql
   vars:
-    mysql_user_name: nop
     mysql_root_password: nop123
