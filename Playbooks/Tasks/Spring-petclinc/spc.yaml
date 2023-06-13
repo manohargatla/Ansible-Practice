@@ -42,7 +42,23 @@
         cmd: ./mvnw package
     - name: copy the service file
       ansible.builtin.copy:
-        src: /home/spring/Ansible-Practice/Playbooks/Tasks/Spring-petclinc/spc.service
+        content: |
+          [Unit]
+          Description=The springpetclinic service
+
+
+          [Service]
+          User=spring
+          WorkingDirectory=/home/spring
+          ExecStart=/usr/bin/java -jar /home/spring/spring-petclinic/target/spring-petclinic-3.0.0-SNAPSHOT.jar
+          SuccessExitStatus=101
+          TimeoutStopSec=10
+          Restart=on-failure
+          RestartSec=5
+
+
+          [Install]
+          WantedBy=multi-user.target
         dest: /etc/systemd/system/spc.service
         remote_src: yes
   handlers:
