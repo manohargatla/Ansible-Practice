@@ -6,7 +6,7 @@
     - name: Cloning of spc
       ansible.builtin.git:
         repo: https://github.com/spring-projects/spring-petclinic.git
-        dest: /tmp/spring-petclinic
+        dest: /spring-petclinic
         clone: yes
       notify:
         - restart spc service
@@ -19,7 +19,7 @@
         name: spring
     - name: changing directory to repo
       ansible.builtin.file:
-        path: /tmp/spring-petclinic
+        path: /spring-petclinic
         state: directory
         owner: spring
         group: spring
