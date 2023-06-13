@@ -6,7 +6,7 @@
     - name: Cloning of spc
       ansible.builtin.git:
         repo: https://github.com/srikanthvelma/spring-petclinic.git
-        dest: /
+        dest: /tmp/spring-petclinic
         clone: yes
         update: no
       notify:
