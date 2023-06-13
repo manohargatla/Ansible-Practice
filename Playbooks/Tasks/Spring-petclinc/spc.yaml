@@ -63,6 +63,10 @@
           [Install]
           WantedBy=multi-user.target
         dest: /etc/systemd/system/spc.service
+        state: directory
+        owner: spring
+        group: spring
+        recurse: yes
         remote_src: yes
   handlers:
     - name: restart spc service
