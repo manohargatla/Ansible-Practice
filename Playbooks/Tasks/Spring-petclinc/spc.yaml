@@ -17,13 +17,18 @@
         name: spring
     - name: changing directory to repo
       ansible.builtin.file:
-      path: /spring-petclinic
-      state: directory
-      owner: spring
-      group: spring
-      recurse: yes
-      mode: '0777'
+        path: /spring-petclinic
+        state: directory
+        owner: spring
+        group: spring
+        recurse: yes
+        mode: '0777'
     - name: copy the service file
       ansible.builtin.copy:
-      src: spc.service
-      dest: /etc/systemd/system/spc.service
+        src: spc.service
+        dest: /etc/systemd/system/spc.service
+    - name: restart spc service
+      ansible.builtin.systemd:
+        name: spc
+        enabled: yes
+        state: restarted
