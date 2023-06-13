@@ -38,6 +38,7 @@
         mode: '0777'
     - name: mvn package
       ansible.builtin.shell:
+        chdir: /tmp/spring-petclinic
         cmd: ./mvnw package
     - name: copy the service file
       ansible.builtin.copy:
