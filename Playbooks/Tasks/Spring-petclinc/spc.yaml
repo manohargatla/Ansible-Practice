@@ -8,6 +8,7 @@
         repo: https://github.com/spring-projects/spring-petclinic.git
         dest: /spring-petclinic
         clone: yes
+        update: no
       notify:
         - restart spc service
     - name: Create a group 
@@ -27,7 +28,7 @@
         mode: '0777'
     - name: copy the service file
       ansible.builtin.copy:
-        src: Playbooks/Tasks/Spring-petclinc/spc.service
+        src: spc.service
         remote_src: yes
         dest: /etc/systemd/system/spc.service
   handlers:
