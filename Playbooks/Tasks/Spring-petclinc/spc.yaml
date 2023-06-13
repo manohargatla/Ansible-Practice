@@ -38,7 +38,7 @@
         owner: spring
         group: spring
         recurse: yes
-        mode: '0777'
+        mode: '0755'
     - name: mvn package
       ansible.builtin.shell:
         chdir: /tmp/spring-petclinic
