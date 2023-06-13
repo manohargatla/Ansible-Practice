@@ -631,6 +631,7 @@ sudo apt install ansible -y
 * After role creation by using `sftp` to download the role into your local system by using `get -r <name_of_role>`
 * write a playbook to call nopcommerce with mysql role
 * Before using mysql role install mysql role into your machine by using `ansible-galaxy install geerlingguy.mysql`
+* Grant the privileges to mysql
 ```yaml
 ---
 - name: install nopcommerce using role
@@ -646,8 +647,11 @@ sudo apt install ansible -y
 * `ansible-playbook -i inventory/hosts Ansible_practice/ansible_role/nop.yaml`
 ![preview](images/ansbl25.png)
 ![preview](images/ansbl26.png)
+![preview](images/ansbl28.1.png)
 ![preview](images/ansbl27.png)
 ![preview](images/ansbl28.png)
+![preview](images/ansbl28.2.png)
+
 # Mysql_role
 * Install mysql role by using `ansible-galaxy install geerlingguy.mysql`
 * write a playbook to call mysql role 

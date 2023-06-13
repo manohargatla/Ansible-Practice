@@ -1,0 +1,29 @@
+---
+- name: Install Spring petclinic application
+  hosts: all
+  become: yes
+  tasks:
+    - name: Cloning of spc
+      ansible.builtin.git:
+        repo: https://github.com/spring-projects/spring-petclinic.git
+        dest: /tmp/spring-petclinic.git
+        clone: yes
+    - name: Create a group 
+      ansible.builtin.group:
+        name: spring
+        state: present
+    - name: Create a user 
+      ansible.builtin.user:
+        name: spring
+    - name: changing directory to repo
+      ansible.builtin.file:
+      path: /spring-petclinic
+      state: directory
+      owner: spring
+      group: spring
+      recurse: yes
+      mode: '0777'
+    - name: copy the service file
+      ansible.builtin.copy:
+      src: spc.service
+      dest: /etc/systemd/system/spc.service

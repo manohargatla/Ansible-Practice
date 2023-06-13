@@ -3,8 +3,8 @@ Description=Broadleaf Commerce Application
 After=network.target
 
 [Service]
-WorkingDirectory=/site
-ExecStart=java -jar ~/Demosite/site/target/agents/spring-instrument.jar
+WorkingDirectory=~/DemoSite/site
+ExecStart=mvn spring-boot:run
 Restart=always
 RestartSec=3
 User=ubuntu
