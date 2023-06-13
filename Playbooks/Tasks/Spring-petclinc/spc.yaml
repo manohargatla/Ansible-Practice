@@ -28,6 +28,9 @@
     - name: Create a user 
       ansible.builtin.user:
         name: spring
+        create_home: yes
+        group: spring
+        state: present
     - name: changing directory to repo
       ansible.builtin.file:
         path: /tmp/spring-petclinic
