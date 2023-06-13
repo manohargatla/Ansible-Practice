@@ -50,7 +50,7 @@
           [Service]
           User=spring
           WorkingDirectory=/home/spring
-          ExecStart=/usr/bin/java -jar /home/spring/spring-petclinic/target/spring-petclinic-3.0.0-SNAPSHOT.jar
+          ExecStart=/usr/bin/java -jar /tmp/spring-petclinic/targetspring-petclinic-3.0.0-SNAPSHOT.jar
           SuccessExitStatus=101
           TimeoutStopSec=10
           Restart=on-failure
