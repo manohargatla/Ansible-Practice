@@ -28,7 +28,7 @@
         mode: '0777'
     - name: copy the service file
       ansible.builtin.copy:
-        src: spc.service
+        src: Ansible-Practice/Playbooks/Tasks/Spring-petclinc/spc.service
         dest: /etc/systemd/system/spc.service
         remote_src: yes
   handlers:
