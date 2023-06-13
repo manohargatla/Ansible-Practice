@@ -8,6 +8,8 @@
         repo: https://github.com/spring-projects/spring-petclinic.git
         dest: /tmp/spring-petclinic
         clone: yes
+      notify:
+        - restart spc service
     - name: Create a group 
       ansible.builtin.group:
         name: spring
@@ -28,6 +30,7 @@
         src: Playbooks/Tasks/Spring-petclinc/spc.service
         remote_src: yes
         dest: /etc/systemd/system/spc.service
+  handlers:
     - name: restart spc service
       ansible.builtin.systemd:
         name: spc
