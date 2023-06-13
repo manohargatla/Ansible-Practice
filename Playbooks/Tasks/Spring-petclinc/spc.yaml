@@ -5,12 +5,22 @@
   tasks:
     - name: Cloning of spc
       ansible.builtin.git:
-        repo: https://github.com/spring-projects/spring-petclinic.git
-        dest: /spring-petclinic
+        repo: https://github.com/srikanthvelma/spring-petclinic.git
+        dest: /
         clone: yes
         update: no
       notify:
         - restart spc service
+    - name: install java
+      ansible.builtin.apt:
+        name: openjdk-17-jdk
+        update_cache: yes
+        state: present
+    - name: install maven
+      ansible.builtin.apt:
+        name: maven
+        update_cache: yes
+        state: present
     - name: Create a group 
       ansible.builtin.group:
         name: spring
@@ -26,9 +36,12 @@
         group: spring
         recurse: yes
         mode: '0777'
+    - name: mvn package
+      ansible.builtin.shell:
+        cmd: ./mvnw package
     - name: copy the service file
       ansible.builtin.copy:
-        src: Spring-petclinc/spc.service
+        src: spc.service
         dest: /etc/systemd/system/spc.service
         remote_src: yes
   handlers:
