@@ -25,7 +25,7 @@
         mode: '0777'
     - name: copy the service file
       ansible.builtin.copy:
-        src: spc.service
+        src: Playbooks/Tasks/Spring-petclinc/spc.service
         remote_src: yes
         dest: /etc/systemd/system/spc.service
     - name: restart spc service
